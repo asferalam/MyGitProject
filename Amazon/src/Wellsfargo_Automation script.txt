@@ -1,0 +1,110 @@
+import java.util.concurrent.TimeUnit;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.interactions.Actions;
+
+public class WellsfagoTest {
+
+	public static void main(String[] args) throws InterruptedException {
+		WebDriver driver = new FirefoxDriver();
+
+		//Maximize the browser
+
+		driver.manage().window().maximize();
+		driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
+
+		//open wellsfargo application
+
+		driver.get("https://www.wellsfargo.com/");
+
+		//Verify personal Tab
+
+		WebElement personal =driver.findElement(By.xpath(".//*[@id='tabNav']/ul/li[1]"));
+
+
+
+		if(personal.isDisplayed()){
+			System.out.println("Personal Tab is available");
+
+		}else{
+			System.out.println("Personal Tab is not available.Please check your application");
+
+
+		}
+
+		// Verify About wellsfargo link
+
+		WebElement AboutWellsFargo = driver.findElement(By.xpath("//a[contains(text(),'About Wells Fargo')]"));
+		if(AboutWellsFargo.isDisplayed()){
+			System.out.println("About Wells Fargo link is available");
+
+		}else{
+			System.out.println("About Wells Fargo link is not available.Please check your application");
+
+	}
+
+
+		AboutWellsFargo.click();
+
+	Thread.sleep(5000);
+
+	//Get the next page title
+
+		String Heading = driver.getTitle();
+
+		System.out.println("Title of the Next Page is "+Heading);
+
+		//Navigate Back to home page
+
+		driver.navigate().back();
+
+		//Check you are on personal Tab
+
+      WebElement personal1 =driver.findElement(By.xpath(".//*[@id='tabNav']/ul/li[1]"));
+
+		System.out.println("current title is " +driver.getTitle());
+
+		if(personal1.isDisplayed()){
+			System.out.println("Your are on Personal Tab");
+
+		}else{
+			System.out.println("You don't navigate back to personal tab.Please check your application");
+
+		}
+		
+		WebElement insurance = driver.findElement(By.xpath("//li[@id='insuranceTab']/a"));
+		Actions action = new Actions(driver);
+
+		Thread.sleep(2000);
+		action.moveToElement(insurance).build().perform();
+
+		WebElement HomeownerInsurence = driver.findElement(By.xpath("//div[@id='insurance']/div/div[2]/ul/li/a"));
+		HomeownerInsurence.click();
+		Thread.sleep(5000);
+		try{
+			driver.findElement(By.xpath("//a[contains(text(),'Change Location')]")).click();
+
+			Thread.sleep(3000);
+		}catch(Exception e){
+			System.out.println(e);
+		}
+
+		String myWindowHandle = driver.getWindowHandle();
+		driver.switchTo().window(myWindowHandle);
+		WebElement zipCode = driver.findElement(By.xpath(".//*[@id='zipCode']"));
+		if(zipCode.isDisplayed()){
+			zipCode.click();
+			zipCode.sendKeys("90034");
+			System.out.println("ZipCode field is displayed");
+
+		}
+		else{
+			System.out.println("ZipCode field is not displayed.Please Check your application.");
+
+		}
+	}
+}
+
